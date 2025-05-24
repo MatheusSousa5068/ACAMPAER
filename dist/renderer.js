@@ -1,6 +1,8 @@
 "use strict";
 // Exemplo de interação com o DOM
 document.addEventListener('DOMContentLoaded', async () => {
+    const isEmbaixadoresPage = window.location.pathname.includes('embaixadores.html');
+    console.log(`Página carregada: ${isEmbaixadoresPage ? 'Embaixadores' : 'Principal'}`);
     const formEmbaixada = document.getElementById('form-embaixada');
     const formEmbaixador = document.getElementById('form-embaixador');
     const formBuscarEmbaixadores = document.getElementById('form-buscar-embaixadores');
@@ -24,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 li.textContent = embaixada.nome;
                 li.dataset.id = embaixada.id.toString();
                 li.addEventListener('click', () => {
-                    window.location.href = `./pages/embaixadores.html?id=${embaixada.id}&nome=${encodeURIComponent(embaixada.nome)}`;
+                    window.location.href = `pages/embaixadores.html?id=${embaixada.id}&nome=${encodeURIComponent(embaixada.nome)}`;
                 });
                 listaEmbaixadas.appendChild(li);
             });
@@ -62,25 +64,42 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
     }
-    // Registrar novo embaixador
+    // Registrar novo embaixador (na página de embaixadores)
     if (formEmbaixador) {
-        setTimeout(() => {
-            console.log("esperandoo");
-        }, 5000);
         formEmbaixador.addEventListener('submit', async (e) => {
             e.preventDefault();
             console.log("Formulário de embaixador enviado");
-            const nome = document.getElementById('nome-embaixador').value;
-            const categoria = document.getElementById('categoria-embaixador').value;
+            const nome = document.getElementById('nome-embaixador').value.trim();
+            const categoria = document.getElementById('categoria-embaixador').value.trim();
             const embaixadaId = parseInt(document.getElementById('embaixada-id').value, 10);
+            if (!nome || !categoria) {
+                alert('Todos os campos são obrigatórios.');
+                return;
+            }
+            if (isNaN(embaixadaId)) {
+                alert('ID da embaixada inválido.');
+                return;
+            }
+            console.log(`Enviando: nome=${nome}, categoria=${categoria}, embaixadaId=${embaixadaId}`);
             try {
                 const result = await window.api.registrarEmbaixador(nome, categoria, embaixadaId);
                 if (result.success) {
                     alert('Embaixador registrado com sucesso!');
                     formEmbaixador.reset();
+                    // Recarregar a lista de embaixadores
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const embaixadaNome = urlParams.get('nome');
+                    if (embaixadaNome) {
+                        // Colocar o ID da embaixada de volta no campo oculto
+                        const embaixadaIdInput = document.getElementById('embaixada-id');
+                        if (embaixadaIdInput) {
+                            embaixadaIdInput.value = urlParams.get('id') || '';
+                        }
+                        carregarEmbaixadores(decodeURIComponent(embaixadaNome));
+                    }
                 }
                 else {
-                    alert('Erro ao registrar embaixador.');
+                    alert(`Erro ao registrar embaixador: ${result.error || ''}`);
                 }
             }
             catch (error) {
@@ -93,24 +112,56 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (formBuscarEmbaixadores) {
         formBuscarEmbaixadores.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const nomeEmbaixada = document.getElementById('nome-embaixada-busca').value;
-            try {
-                const embaixadores = await window.api.buscarEmbaixadores(nomeEmbaixada);
-                listaEmbaixadores.innerHTML = ''; // Limpa a lista antes de adicionar novos itens
-                embaixadores.forEach((embaixador) => {
-                    const li = document.createElement('li');
-                    li.textContent = `${embaixador.nome} - ${embaixador.categoria}`;
-                    listaEmbaixadores.appendChild(li);
-                });
+            const nomeEmbaixada = document.getElementById('nome-embaixada-busca').value.trim();
+            if (!nomeEmbaixada) {
+                alert('O nome da embaixada é obrigatório para a busca.');
+                return;
             }
-            catch (error) {
-                console.error('Erro ao buscar embaixadores:', error);
-                alert('Erro ao buscar embaixadores.');
-            }
+            carregarEmbaixadores(nomeEmbaixada);
         });
     }
-    // Carregar embaixadas ao iniciar
-    if (listaEmbaixadas) {
+    const carregarEmbaixadores = async (nomeEmbaixada) => {
+        if (!listaEmbaixadores)
+            return; // Verifica se o elemento existe
+        try {
+            const embaixadores = await window.api.buscarEmbaixadores(nomeEmbaixada);
+            listaEmbaixadores.innerHTML = ''; // Limpa a lista antes de adicionar novos itens
+            if (embaixadores.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = "Nenhum embaixador encontrado";
+                listaEmbaixadores.appendChild(li);
+                return;
+            }
+            embaixadores.forEach((embaixador) => {
+                const li = document.createElement('li');
+                li.textContent = `${embaixador.nome} - ${embaixador.categoria}`;
+                listaEmbaixadores.appendChild(li);
+            });
+        }
+        catch (error) {
+            console.error('Erro ao listar embaixadores:', error);
+            alert('Erro ao listar embaixadores.');
+        }
+    };
+    if (isEmbaixadoresPage) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const embaixadaId = urlParams.get('id');
+        const embaixadaNome = urlParams.get('nome');
+        console.log(`Parâmetros da URL: id=${embaixadaId}, nome=${embaixadaNome}`);
+        const tituloEmbaixada = document.getElementById('titulo-embaixada');
+        if (tituloEmbaixada && embaixadaNome) {
+            tituloEmbaixada.textContent = `Embaixada: ${decodeURIComponent(embaixadaNome)}`;
+        }
+        const embaixadaIdInput = document.getElementById('embaixada-id');
+        if (embaixadaIdInput && embaixadaId) {
+            embaixadaIdInput.value = embaixadaId;
+            console.log(`Campo embaixada-id definido com valor: ${embaixadaId}`);
+        }
+        if (embaixadaNome) {
+            carregarEmbaixadores(decodeURIComponent(embaixadaNome));
+        }
+    }
+    else {
         carregarEmbaixadas();
     }
 });

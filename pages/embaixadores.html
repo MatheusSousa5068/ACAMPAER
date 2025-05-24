@@ -94,14 +94,16 @@
     <h1>Embaixadores</h1>
   </header>
   <main>
-    <h2 id="nome-embaixada"></h2>
+    <h2 id="titulo-embaixada">Embaixada</h2>
     <ul id="lista-embaixadores"></ul>
-    <form id="form-registrar-embaixador">
+    <form id="form-embaixador">
       <h2>Registrar Novo Embaixador</h2>
       <input type="text" id="nome-embaixador" placeholder="Nome do Embaixador" required />
       <input type="text" id="categoria-embaixador" placeholder="Categoria" required />
+      <input type="hidden" id="embaixada-id" value="" />
       <button type="submit">Registrar</button>
     </form>
+    <a href="../index.html" class="back-link">Voltar</a>
   </main>
   <script src="../dist/renderer.js"></script>
 </body>

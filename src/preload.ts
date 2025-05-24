@@ -16,7 +16,9 @@ declare global {
     api: {
       buscarEmbaixadas: () => Promise<{ id: number; nome: string }[]>;
       registrarEmbaixada: (nome: string) => Promise<{ success: boolean }>;
-      registrarEmbaixador: (nome: string, categoria: string, embaixadaId: number) => Promise<{ success: boolean }>;
+      registrarEmbaixador: (nome: string, categoria: string, embaixadaId: number) => Promise<{
+        error: string; success: boolean 
+}>;
       buscarEmbaixadores: (nomeEmbaixada: string) => Promise<{ nome: string; categoria: string }[]>;
     };
   }
