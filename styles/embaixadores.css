@@ -1,0 +1,133 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+  color: #003366;
+}
+
+header {
+  background-color: #003366;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+main {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 2rem auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 2px solid #003366;
+}
+
+h1 {
+  color: #fff;
+  text-align: center;
+}
+
+h2 {
+  color: #003366;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+/* Estilo melhorado para os embaixadores */
+#lista-embaixadores li {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border: 2px solid #003366;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin: 0.8rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #003366;
+  box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+#lista-embaixadores li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.2);
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+}
+
+#lista-embaixadores li::before {
+  content: "👤";
+  font-size: 1.5rem;
+  margin-right: 0.8rem;
+}
+
+/* Destaque para quando não há embaixadores */
+#lista-embaixadores li:only-child {
+  background: #fff3cd;
+  border-color: #ffc107;
+  color: #856404;
+  font-style: italic;
+  text-align: center;
+}
+
+#lista-embaixadores li:only-child::before {
+  content: "⚠️";
+}
+
+form {
+  margin-top: 2rem;
+}
+
+input, button {
+  display: block;
+  width: 100%;
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+button {
+  background-color: #003366;
+  color: white;
+  cursor: pointer;
+  border: none;
+}
+
+button:hover {
+  background-color: #00509e;
+}
+
+.back-link {
+  display: block;
+  margin-top: 1rem;
+  text-align: center;
+  color: #003366;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* Título da seção de embaixadores */
+.embaixadores-section {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 2px solid #003366;
+}
+
+.embaixadores-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 1rem;
+  text-align: center;
+}

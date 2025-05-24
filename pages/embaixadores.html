@@ -4,90 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ACAMPAER - Embaixadores</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f9;
-      color: #003366;
-    }
-
-    header {
-      background-color: #003366;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    main {
-      padding: 2rem;
-      max-width: 800px;
-      margin: 2rem auto;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      border: 2px solid #003366;
-    }
-
-    h1 {
-      color: #fff;
-      text-align: center;
-    }
-
-    h2 {
-      color: #003366;
-      margin-top: 1.5rem;
-      margin-bottom: 1rem;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      padding: 0.5rem;
-      border-bottom: 1px solid #ccc;
-    }
-
-    form {
-      margin-top: 2rem;
-    }
-
-    input, button {
-      display: block;
-      width: 100%;
-      padding: 0.8rem;
-      margin: 0.5rem 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1rem;
-    }
-
-    button {
-      background-color: #003366;
-      color: white;
-      cursor: pointer;
-      border: none;
-    }
-
-    button:hover {
-      background-color: #00509e;
-    }
-
-    .back-link {
-      display: block;
-      margin-top: 1rem;
-      text-align: center;
-      color: #003366;
-      text-decoration: none;
-    }
-
-    .back-link:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <link rel="stylesheet" href="../styles/embaixadores.css">
 </head>
 <body>
   <header>
@@ -95,7 +12,7 @@
   </header>
   <main>
     <h2 id="titulo-embaixada">Embaixada</h2>
-    <ul id="lista-embaixadores"></ul>
+    
     <form id="form-embaixador">
       <h2>Registrar Novo Embaixador</h2>
       <input type="text" id="nome-embaixador" placeholder="Nome do Embaixador" required />
@@ -103,6 +20,12 @@
       <input type="hidden" id="embaixada-id" value="" />
       <button type="submit">Registrar</button>
     </form>
+
+    <div class="embaixadores-section">
+      <div class="embaixadores-title">Embaixadores Registrados</div>
+      <ul id="lista-embaixadores"></ul>
+    </div>
+    
     <a href="../index.html" class="back-link">Voltar</a>
   </main>
   <script src="../dist/renderer.js"></script>
