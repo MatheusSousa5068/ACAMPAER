@@ -74,6 +74,7 @@ app.on('ready', async () => {
         JOIN EMBAIXADA em ON e.embaixada_id = em.id
         JOIN CATEGORIA c ON e.categoria_id = c.id
         WHERE em.nome = ?
+        ORDER BY c.id, e.nome
       `, [nomeEmbaixada]);
       return embaixadores;
     } catch (error) {
