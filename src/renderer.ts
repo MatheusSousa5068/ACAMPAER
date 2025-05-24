@@ -1,6 +1,6 @@
 // Exemplo de interação com o DOM
 document.addEventListener('DOMContentLoaded', async () => {
-  const formEmbaixada = document.getElementById('form-registrar-embaixador') as HTMLFormElement;
+  const formEmbaixada = document.getElementById('form-embaixada') as HTMLFormElement;
   const formEmbaixador = document.getElementById('form-embaixador') as HTMLFormElement;
   const formBuscarEmbaixadores = document.getElementById('form-buscar-embaixadores') as HTMLFormElement;
   const listaEmbaixadores = document.getElementById('lista-embaixadores') as HTMLUListElement;
@@ -8,12 +8,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   console.log("DOM carregado e elementos encontrados");
 
-  // Função para carregar embaixadas
   const carregarEmbaixadas = async () => {
     if (!listaEmbaixadas) return; // Verifica se o elemento existe
     try {
       const embaixadas = await window.api.buscarEmbaixadas();
       listaEmbaixadas.innerHTML = ''; // Limpa a lista antes de adicionar novos itens
+      
+      if (embaixadas.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = "Nenhuma embaixada encontrada";
+        listaEmbaixadas.appendChild(li);
+        return;
+      }
+      
       embaixadas.forEach((embaixada: { id: number; nome: string }) => {
         const li = document.createElement('li');
         li.textContent = embaixada.nome;
@@ -29,13 +36,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
+
   // Registrar nova embaixada
   if (formEmbaixada) {
     formEmbaixada.addEventListener('submit', async (e) => {
+      
+      console.log("Formulário de embaixada encontrado");
       e.preventDefault();
       console.log("Formulário de embaixada enviado");
 
-      const nome = (document.getElementById('nome-embaixada') as HTMLInputElement).value;
+      const nome = (document.getElementById('nome-embaixada') as HTMLInputElement).value.trim();
+      
+      if (!nome) {
+        alert('O nome da embaixada é obrigatório.');
+        return;
+      }
 
       try {
         const result = await window.api.registrarEmbaixada(nome);
