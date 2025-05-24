@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (embaixadas.length === 0) {
                 const li = document.createElement('li');
                 li.textContent = "Nenhuma embaixada encontrada";
+                li.classList.add('empty-state'); // Adicionar classe específica
                 listaEmbaixadas.appendChild(li);
                 return;
             }
@@ -127,47 +128,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert('Erro ao registrar embaixador.');
             }
         });
-        // Gerenciar nova categoria
-        const btnNovaCategoria = document.getElementById('btn-nova-categoria');
-        const novaCategoriaForm = document.getElementById('nova-categoria-form');
-        const btnSalvarCategoria = document.getElementById('btn-salvar-categoria');
-        const btnCancelarCategoria = document.getElementById('btn-cancelar-categoria');
-        if (btnNovaCategoria && novaCategoriaForm) {
-            btnNovaCategoria.addEventListener('click', () => {
-                novaCategoriaForm.classList.toggle('hidden');
-            });
-        }
-        if (btnCancelarCategoria && novaCategoriaForm) {
-            btnCancelarCategoria.addEventListener('click', () => {
-                novaCategoriaForm.classList.add('hidden');
-                document.getElementById('nova-categoria-nome').value = '';
-            });
-        }
-        if (btnSalvarCategoria) {
-            btnSalvarCategoria.addEventListener('click', async () => {
-                const nomeCategoria = document.getElementById('nova-categoria-nome').value.trim();
-                if (!nomeCategoria) {
-                    alert('Nome da categoria é obrigatório.');
-                    return;
-                }
-                try {
-                    const result = await window.api.registrarCategoria(nomeCategoria);
-                    if (result.success) {
-                        alert('Categoria registrada com sucesso!');
-                        document.getElementById('nova-categoria-nome').value = '';
-                        novaCategoriaForm?.classList.add('hidden');
-                        carregarCategorias(); // Recarregar lista de categorias
-                    }
-                    else {
-                        alert(`Erro ao registrar categoria: ${result.error || ''}`);
-                    }
-                }
-                catch (error) {
-                    console.error('Erro ao registrar categoria:', error);
-                    alert('Erro ao registrar categoria.');
-                }
-            });
-        }
     }
     // Buscar embaixadores por embaixada
     if (formBuscarEmbaixadores) {
@@ -190,12 +150,26 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (embaixadores.length === 0) {
                 const li = document.createElement('li');
                 li.textContent = "Nenhum embaixador encontrado";
+                li.classList.add('empty-state'); // Adicionar classe específica
                 listaEmbaixadores.appendChild(li);
                 return;
             }
             embaixadores.forEach((embaixador) => {
                 const li = document.createElement('li');
-                li.textContent = `${embaixador.nome} - ${embaixador.categoria}`;
+                // Criar span para o nome
+                const nomeSpan = document.createElement('span');
+                nomeSpan.textContent = embaixador.nome;
+                nomeSpan.classList.add('embaixador-nome');
+                // Criar badge para a categoria
+                const categoriaBadge = document.createElement('span');
+                categoriaBadge.textContent = embaixador.categoria;
+                categoriaBadge.classList.add('categoria-badge');
+                // Adicionar classe específica baseada na categoria
+                const categoriaLower = embaixador.categoria.toLowerCase();
+                categoriaBadge.classList.add(`categoria-${categoriaLower}`);
+                // Adicionar elementos ao li
+                li.appendChild(nomeSpan);
+                li.appendChild(categoriaBadge);
                 listaEmbaixadores.appendChild(li);
             });
         }

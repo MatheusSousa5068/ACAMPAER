@@ -24,8 +24,14 @@ main {
 }
 
 h1 {
-    color: white;
+    color: #fff;
     text-align: center;
+}
+
+h2 {
+    color: #003366;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 form {
@@ -40,6 +46,7 @@ input, button {
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
+    box-sizing: border-box; /* Corrige o problema de largura */
 }
 
 button {
@@ -56,14 +63,67 @@ button:hover {
 ul {
     list-style: none;
     padding: 0;
+    margin-top: 2rem;
 }
 
-li {
-    padding: 0.5rem;
-    border-bottom: 1px solid #ccc;
-    cursor: pointer;
+/* Estilo melhorado para as embaixadas */
+#lista-embaixadas li {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border: 2px solid #003366;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin: 0.8rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #003366;
+  box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  cursor: pointer;
 }
 
-li:hover {
-    background-color: #f0f0f0;
+#lista-embaixadas li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.2);
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+}
+
+#lista-embaixadas li::before {
+  content: "🏛️";
+  font-size: 1.5rem;
+  margin-right: 0.8rem;
+}
+
+#lista-embaixadas li.empty-state {
+  background: #fff3cd;
+  border-color: #ffc107;
+  color: #856404;
+  font-style: italic;
+  text-align: center;
+  cursor: default;
+}
+
+#lista-embaixadas li.empty-state::before {
+  content: "⚠️";
+}
+
+#lista-embaixadas li.empty-state:hover {
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1);
+  background: #fff3cd;
+}
+
+/* Container da lista */
+.list-container {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 2px solid #003366;
+}
+
+.list-container h2 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 1rem;
+  text-align: center;
 }
