@@ -16,7 +16,22 @@
     <form id="form-embaixador">
       <h2>Registrar Novo Embaixador</h2>
       <input type="text" id="nome-embaixador" placeholder="Nome do Embaixador" required />
-      <input type="text" id="categoria-embaixador" placeholder="Categoria" required />
+      
+      <div class="categoria-container">
+        <select id="categoria-embaixador" required>
+          <option value="">Selecione uma categoria</option>
+        </select>
+        <button type="button" id="btn-nova-categoria" class="btn-secondary">+ Nova</button>
+      </div>
+      
+      <div id="nova-categoria-form" class="hidden">
+        <input type="text" id="nova-categoria-nome" placeholder="Nome da nova categoria" />
+        <div class="categoria-buttons">
+          <button type="button" id="btn-salvar-categoria">Salvar</button>
+          <button type="button" id="btn-cancelar-categoria">Cancelar</button>
+        </div>
+      </div>
+      
       <input type="hidden" id="embaixada-id" value="" />
       <button type="submit">Registrar</button>
     </form>

@@ -36,6 +36,26 @@ document.addEventListener('DOMContentLoaded', async () => {
             alert('Erro ao listar embaixadas.');
         }
     };
+    // Carregar categorias no select
+    const carregarCategorias = async () => {
+        try {
+            const categorias = await window.api.buscarCategorias();
+            const selectCategoria = document.getElementById('categoria-embaixador');
+            if (!selectCategoria)
+                return;
+            // Limpar opções existentes (exceto a primeira)
+            selectCategoria.innerHTML = '<option value="">Selecione uma categoria</option>';
+            categorias.forEach((categoria) => {
+                const option = document.createElement('option');
+                option.value = categoria.id.toString();
+                option.textContent = categoria.nome;
+                selectCategoria.appendChild(option);
+            });
+        }
+        catch (error) {
+            console.error('Erro ao carregar categorias:', error);
+        }
+    };
     // Registrar nova embaixada
     if (formEmbaixada) {
         formEmbaixada.addEventListener('submit', async (e) => {
@@ -70,9 +90,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             e.preventDefault();
             console.log("Formulário de embaixador enviado");
             const nome = document.getElementById('nome-embaixador').value.trim();
-            const categoria = document.getElementById('categoria-embaixador').value.trim();
+            const categoriaId = parseInt(document.getElementById('categoria-embaixador').value, 10);
             const embaixadaId = parseInt(document.getElementById('embaixada-id').value, 10);
-            if (!nome || !categoria) {
+            if (!nome || !categoriaId) {
                 alert('Todos os campos são obrigatórios.');
                 return;
             }
@@ -80,9 +100,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert('ID da embaixada inválido.');
                 return;
             }
-            console.log(`Enviando: nome=${nome}, categoria=${categoria}, embaixadaId=${embaixadaId}`);
+            console.log(`Enviando: nome=${nome}, categoriaId=${categoriaId}, embaixadaId=${embaixadaId}`);
             try {
-                const result = await window.api.registrarEmbaixador(nome, categoria, embaixadaId);
+                const result = await window.api.registrarEmbaixador(nome, categoriaId, embaixadaId);
                 if (result.success) {
                     alert('Embaixador registrado com sucesso!');
                     formEmbaixador.reset();
@@ -107,6 +127,47 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert('Erro ao registrar embaixador.');
             }
         });
+        // Gerenciar nova categoria
+        const btnNovaCategoria = document.getElementById('btn-nova-categoria');
+        const novaCategoriaForm = document.getElementById('nova-categoria-form');
+        const btnSalvarCategoria = document.getElementById('btn-salvar-categoria');
+        const btnCancelarCategoria = document.getElementById('btn-cancelar-categoria');
+        if (btnNovaCategoria && novaCategoriaForm) {
+            btnNovaCategoria.addEventListener('click', () => {
+                novaCategoriaForm.classList.toggle('hidden');
+            });
+        }
+        if (btnCancelarCategoria && novaCategoriaForm) {
+            btnCancelarCategoria.addEventListener('click', () => {
+                novaCategoriaForm.classList.add('hidden');
+                document.getElementById('nova-categoria-nome').value = '';
+            });
+        }
+        if (btnSalvarCategoria) {
+            btnSalvarCategoria.addEventListener('click', async () => {
+                const nomeCategoria = document.getElementById('nova-categoria-nome').value.trim();
+                if (!nomeCategoria) {
+                    alert('Nome da categoria é obrigatório.');
+                    return;
+                }
+                try {
+                    const result = await window.api.registrarCategoria(nomeCategoria);
+                    if (result.success) {
+                        alert('Categoria registrada com sucesso!');
+                        document.getElementById('nova-categoria-nome').value = '';
+                        novaCategoriaForm?.classList.add('hidden');
+                        carregarCategorias(); // Recarregar lista de categorias
+                    }
+                    else {
+                        alert(`Erro ao registrar categoria: ${result.error || ''}`);
+                    }
+                }
+                catch (error) {
+                    console.error('Erro ao registrar categoria:', error);
+                    alert('Erro ao registrar categoria.');
+                }
+            });
+        }
     }
     // Buscar embaixadores por embaixada
     if (formBuscarEmbaixadores) {
@@ -157,6 +218,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             embaixadaIdInput.value = embaixadaId;
             console.log(`Campo embaixada-id definido com valor: ${embaixadaId}`);
         }
+        // Carregar categorias quando estiver na página de embaixadores
+        carregarCategorias();
         if (embaixadaNome) {
             carregarEmbaixadores(decodeURIComponent(embaixadaNome));
         }
